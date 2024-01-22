@@ -71,12 +71,6 @@ export class Worker {
         const contactChannel = interaction.guild?.channels.cache.get(this.Config.contactChannel) as TextBasedChannel | undefined;
         if (!contactChannel) return interaction.editReply({ content: "Nie znaleziono kanału kontaktowego." });
 
-        const fetchedMessage = await contactChannel.messages.fetch(fetchedDbUser.message_id);
-        if (!fetchedMessage) return interaction.editReply({ content: "Nie znaleziono wiadomości z kontaktem użytkownika." });
-
-        try {
-            await fetchedMessage.delete();
-        } catch(e) {}
         this.Mongo.deleteWorker(fetchedDbUser.user_id);
 
         await interaction.editReply({ content: "Wyrejestrowano pracownika." });
