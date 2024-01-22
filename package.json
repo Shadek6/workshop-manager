@@ -1,0 +1,27 @@
+{
+  "devDependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.2",
+    "mongodb": "^6.3.0",
+    "nodemon": "^3.0.3",
+    "ts-node": "^10.9.2"
+  },
+  "name": "workshop-manager",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "nodemon src/index.ts",
+    "commands": "ts-node src/deploy-commands.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shadek6/workshop-manager.git"
+  },
+  "author": "Shadek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shadek6/workshop-manager/issues"
+  },
+  "homepage": "https://github.com/Shadek6/workshop-manager#readme",
+  "description": ""
+}
