@@ -104,7 +104,6 @@ export const data = new SlashCommandBuilder()
     .setName("worker")
     .setDescription("Zarządzanie pracownikami")
     .setDMPermission(false)
-    .setDefaultMemberPermissions(PermissionsBitField.Flags.ModerateMembers)
     .addSubcommand((subcommand) =>
         subcommand
             .setName("add")
