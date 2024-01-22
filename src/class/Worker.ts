@@ -16,7 +16,7 @@ export class Worker {
         this.Config = fetchedConfig;
     }
     public async Add(interaction: ChatInputCommandInteraction) {
-        await interaction.deferReply({ ephemeral: true })
+        await interaction.deferReply({ ephemeral: true });
         if (!this.Config.welcomeChannel) return interaction.editReply({ content: "Nie znaleziono kanału powitalnego." });
 
         const Worker = interaction.options.getUser("worker", true);
@@ -38,7 +38,7 @@ export class Worker {
     }
 
     public async Register(interaction: ChatInputCommandInteraction) {
-        await interaction.deferReply({ ephemeral: true })
+        await interaction.deferReply({ ephemeral: true });
         const char_name = interaction.options.getString("char_name", true);
         const account_number = interaction.options.getString("account_number", true);
         const phone_number = interaction.options.getString("phone_number", true);
@@ -56,26 +56,31 @@ export class Worker {
 
         const sentEmbed = await contactChannel.send({ content: `<@${fetchedUser.id}>`, embeds: [Embed] });
         await this.Mongo.addWorker(user_id, char_name, account_number, phone_number, sentEmbed.id);
-        return interaction.editReply({ content: "Zarejestrowano!" });
+        await interaction.editReply({ content: "Zarejestrowano!" });
+        return;
     }
 
     public async Unregister(interaction: ChatInputCommandInteraction) {
-        await interaction.deferReply({ ephemeral: true })
-        if (!checkUserRoles(interaction.member as GuildMember, [this.Config.teamRole])) return interaction.editReply({ content: "Nie masz uprawnień do wyrejestrowania pracownika." });
+        await interaction.deferReply({ ephemeral: true });
+        if (!checkUserRoles(interaction.member as GuildMember, [this.Config.teamRole]))
+            return interaction.editReply({ content: "Nie masz uprawnień do wyrejestrowania pracownika." });
 
         const fetchedDbUser = await this.Mongo.getWorker(interaction.options.getString("worker", true));
         if (!fetchedDbUser) return interaction.editReply({ content: "Nie znaleziono pracownika." });
 
         const contactChannel = interaction.guild?.channels.cache.get(this.Config.contactChannel) as TextBasedChannel | undefined;
         if (!contactChannel) return interaction.editReply({ content: "Nie znaleziono kanału kontaktowego." });
-        
+
         const fetchedMessage = await contactChannel.messages.fetch(fetchedDbUser.message_id);
         if (!fetchedMessage) return interaction.editReply({ content: "Nie znaleziono wiadomości z kontaktem użytkownika." });
 
-        await fetchedMessage.delete();
+        try {
+            await fetchedMessage.delete();
+        } catch(e) {}
         this.Mongo.deleteWorker(fetchedDbUser.user_id);
 
-        return interaction.editReply({ content: "Wyrejestrowano pracownika." });
+        await interaction.editReply({ content: "Wyrejestrowano pracownika." });
+        return;
     }
 
     private buildContact(char_name: string, phone_number: string, account_number: string, fetchedUser: GuildMember) {
@@ -113,16 +118,17 @@ export const data = new SlashCommandBuilder()
             .addUserOption((option) => option.setName("worker").setDescription("Pracownik do dodania").setRequired(true))
             .addStringOption((option) => option.setName("nickname").setDescription("Nickname IC pracownika").setRequired(true))
     )
-    .addSubcommand((subcommand) => subcommand
-        .setName("register")
-        .setDescription("Zarejestruj się jako pracownik")
-        .addStringOption((option) => option.setName("char_name").setDescription("Nick IC").setRequired(true))
-        .addStringOption((option) => option.setName("account_number").setDescription("Numer konta").setRequired(true))
-        .addStringOption((option) => option.setName("phone_number").setDescription("Numer telefonu").setRequired(true))
+    .addSubcommand((subcommand) =>
+        subcommand
+            .setName("register")
+            .setDescription("Zarejestruj się jako pracownik")
+            .addStringOption((option) => option.setName("char_name").setDescription("Nick IC").setRequired(true))
+            .addStringOption((option) => option.setName("account_number").setDescription("Numer konta").setRequired(true))
+            .addStringOption((option) => option.setName("phone_number").setDescription("Numer telefonu").setRequired(true))
     )
-    .addSubcommand((subcommand) => subcommand
-        .setName("unregister")
-        .setDescription("Wyrejestruj pracownika.")
-        .addStringOption((option) => option.setName("worker").setDescription("Pracownik do wyrejestrowania").setRequired(true))
-    )
-
+    .addSubcommand((subcommand) =>
+        subcommand
+            .setName("unregister")
+            .setDescription("Wyrejestruj pracownika.")
+            .addStringOption((option) => option.setName("worker").setDescription("Pracownik do wyrejestrowania").setRequired(true))
+    );

@@ -8,10 +8,12 @@ export async function ButtonInteractions(interaction: ButtonInteraction) {
     const bonus = new Bonus(interaction.guildId!);
     const ticket = new Ticket(interaction.guildId!);
 
+    if (!config) return;
+
     if(interaction.customId === "bonus-payout") await bonus.Payout(interaction);
 
-    if (interaction.customId === "ticket-tuning") ticket.Create(interaction, "tuning", config?.workerRole ? [config.workerRole] : undefined)
-    if (interaction.customId === "ticket-work") ticket.Create(interaction, "work", config?.teamRole ? [config.teamRole] : undefined)
+    if (interaction.customId === "ticket-tuning") ticket.Create(interaction, "tuning", [config.workerRole])
+    if (interaction.customId === "ticket-work") ticket.Create(interaction, "work", [config.teamRole])
     if (interaction.customId === "ticket-partnership") ticket.Create(interaction, "partnership")
 
     if (interaction.customId === "ticket-close") ticket.Close(interaction); 
