@@ -7,12 +7,13 @@ import { client } from "..";
 
 export class Worker {
     private Config: IConfig = {} as IConfig;
-    private Mongo: Database = new Database(this.Config.guildId);
+    private Mongo: Database;
 
     constructor(guildId: string) {
         const fetchedConfig = getConfig(guildId);
         if (!fetchedConfig) return;
 
+        this.Mongo = new Database(guildId);
         this.Config = fetchedConfig;
     }
     public async Add(interaction: ChatInputCommandInteraction) {
