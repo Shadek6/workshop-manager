@@ -17,8 +17,6 @@ export class Database {
         const database = this.client.db(this.guildConfig?.dbName);
         const collection = database.collection("workers");
 
-        if(!database) this.client.close()
-
         return collection.insertOne({ user_id: user_id, char_name: char_name, account_number: account_number, phone_number: phone_number, message_id: message_id });
     }
 
@@ -26,16 +24,12 @@ export class Database {
         const database = this.client.db(this.guildConfig?.dbName);
         const collection = database.collection("workers");
 
-        if(!database) this.client.close()
-
         return collection.findOne({ user_id: user_id });
     }
 
     public async deleteWorker(user_id: string) {
         const database = this.client.db(this.guildConfig?.dbName);
         const collection = database.collection("workers");
-
-        if(!database) this.client.close()
 
         return collection.deleteOne({ user_id: user_id });
     }
