@@ -10,10 +10,10 @@ export class Worker {
     private Mongo: Database;
 
     constructor(guildId: string) {
+        this.Mongo = new Database(guildId);
         const fetchedConfig = getConfig(guildId);
         if (!fetchedConfig) return;
 
-        this.Mongo = new Database(guildId);
         this.Config = fetchedConfig;
     }
     public async Add(interaction: ChatInputCommandInteraction) {
