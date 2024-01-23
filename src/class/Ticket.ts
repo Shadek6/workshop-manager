@@ -85,6 +85,7 @@ export class Ticket {
         await interaction.editReply({ content: "Ticket zostanie zamknięty za 5 sekund..." });
         setTimeout(async () => {
             await (interaction.channel as TextChannel).setParent(this.Config.archiveCategory);
+            await (interaction.channel as TextChannel).permissionOverwrites.set([]);
             await interaction.channel!.send({ content: "# Ticket został zamknięty." });
         }, 5000)
     }
