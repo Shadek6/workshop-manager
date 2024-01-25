@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ChatInputCommandInteraction, EmbedBuilder, GuildMember, GuildTextBasedChannel, SlashCommandBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ChatInputCommandInteraction, EmbedBuilder, Guild, GuildMember, GuildTextBasedChannel, SlashCommandBuilder } from "discord.js";
 import { getConfig } from "../util/getConfig";
 import { IConfig } from "../types/Config";
 import { Database } from "./Database";
@@ -81,11 +81,27 @@ export class Bonus {
 
         if (!checkUserRoles(fetchedUser, [this.Config.payoutRole])) return await interaction.editReply({ content: "Nie masz uprawnień do wypłaty premii." });
 
+        const ThanksEmbed = this.buildThanksEmbed(fetchedUser, interaction.guild!, messageEmbed.fields[3].value);
+        const embedAuthor = interaction.guild?.members.cache.get(messageEmbed.author?.name || "");
+
         messageEmbed.fields[6].value = `${PositiveEmoji}`;
         messageEmbed.fields[7].value = `${fetchedUser.nickname || fetchedUser.user.username}`;
 
+        if(embedAuthor) await embedAuthor.dmChannel?.send({ embeds: [ThanksEmbed] });
+
         await interaction.message.edit({ embeds: [messageEmbed], components: [] });
         return await interaction.editReply({ content: "Wypłacono premię." });
+    }
+
+    private buildThanksEmbed(author: GuildMember, guild: Guild, bonusAmount: string) {
+        const embed = new EmbedBuilder()
+            .setTitle("Twoja premia została wypłacona!")
+            .setDescription(`Dziękujemy za pracę w **${guild.name}**. Twoja premia w wysokości \`${bonusAmount}\` została wypłacona na konto bankowe.`)
+            .setColor("Green")
+            .setThumbnail(guild.iconURL() || null)
+            .setAuthor({ name: author.nickname || author.user.username, iconURL: author.avatarURL() || undefined })
+            .setTimestamp()
+        return embed;
     }
 }
 
