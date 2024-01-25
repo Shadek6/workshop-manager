@@ -87,7 +87,7 @@ export class Bonus {
         messageEmbed.fields[6].value = `${PositiveEmoji}`;
         messageEmbed.fields[7].value = `${fetchedUser.nickname || fetchedUser.user.username}`;
 
-        if(embedAuthor) await embedAuthor.dmChannel?.send({ embeds: [ThanksEmbed] });
+        if(embedAuthor) await embedAuthor.send({ embeds: [ThanksEmbed] });
 
         await interaction.message.edit({ embeds: [messageEmbed], components: [] });
         return await interaction.editReply({ content: "Wypłacono premię." });
