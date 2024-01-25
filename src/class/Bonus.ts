@@ -82,7 +82,7 @@ export class Bonus {
         if (!checkUserRoles(fetchedUser, [this.Config.payoutRole])) return await interaction.editReply({ content: "Nie masz uprawnień do wypłaty premii." });
 
         const ThanksEmbed = this.buildThanksEmbed(fetchedUser, interaction.guild!, messageEmbed.fields[3].value);
-        const embedAuthor = interaction.guild?.members.cache.get(messageEmbed.author?.name || "");
+        const embedAuthor = interaction.guild?.members.cache.find(m => m.nickname === messageEmbed.author?.name || m.user.username === messageEmbed.author?.name)
 
         messageEmbed.fields[6].value = `${PositiveEmoji}`;
         messageEmbed.fields[7].value = `${fetchedUser.nickname || fetchedUser.user.username}`;
