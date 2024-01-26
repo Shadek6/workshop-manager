@@ -70,14 +70,14 @@ export class Bonus {
     }
 
     public async Payout(interaction: ButtonInteraction) {
-        await interaction.deferReply({ ephemeral: true })
+        await interaction.deferReply({ ephemeral: true, fetchReply: false })
         const PositiveEmoji = client.emojis.cache.get("1198749355214114867") || "✅";
         const fetchedUser = interaction.guild?.members.cache.get(interaction.user.id)!;
         const messageEmbed = interaction.message.embeds[0];
 
-        if (!fetchedUser) return await interaction.editReply({ content: "Nie znaleziono użytkownika." });
-        if (!messageEmbed) return await interaction.editReply({ content: "Nie znaleziono wiadomości." });
-        if (!this.Config.payoutRole) return await interaction.editReply({ content: "Nie znaleziono roli do wypłat." });
+        if (!fetchedUser) return interaction.editReply({ content: "Nie znaleziono użytkownika." }).catch();
+        if (!messageEmbed) return interaction.editReply({ content: "Nie znaleziono wiadomości." }).catch();
+        if (!this.Config.payoutRole) return interaction.editReply({ content: "Nie znaleziono roli do wypłat." }).catch();
 
         if (!checkUserRoles(fetchedUser, [this.Config.payoutRole])) return await interaction.editReply({ content: "Nie masz uprawnień do wypłaty premii." });
 
@@ -87,10 +87,10 @@ export class Bonus {
         messageEmbed.fields[6].value = `${PositiveEmoji}`;
         messageEmbed.fields[7].value = `${fetchedUser.nickname || fetchedUser.user.username}`;
 
-        if(embedAuthor) await embedAuthor.send({ embeds: [ThanksEmbed] });
+        if(embedAuthor) embedAuthor.send({ embeds: [ThanksEmbed] }).catch();
 
         await interaction.message.edit({ embeds: [messageEmbed], components: [] });
-        return await interaction.editReply({ content: "Wypłacono premię." });
+        return interaction.editReply({ content: "Wypłacono premię." }).catch();
     }
 
     private buildThanksEmbed(author: GuildMember, guild: Guild, bonusAmount: string) {
