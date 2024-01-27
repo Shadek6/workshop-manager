@@ -72,9 +72,10 @@ export class Bonus {
     public async Payout(interaction: ButtonInteraction) {
         await interaction.deferReply({ ephemeral: true, fetchReply: false })
         const PositiveEmoji = client.emojis.cache.get("1198749355214114867") || "✅";
-        const fetchedUser = interaction.guild?.members.cache.get(interaction.user.id)!;
+        const fetchedUser = interaction.guild!.members.cache.get(interaction.user.id)!;
         const messageEmbed = interaction.message.embeds[0];
 
+        if (!interaction.guild) return interaction.editReply({ content: "Nie znaleziono serwera." }).catch();
         if (!fetchedUser) return interaction.editReply({ content: "Nie znaleziono użytkownika." }).catch();
         if (!messageEmbed) return interaction.editReply({ content: "Nie znaleziono wiadomości." }).catch();
         if (!this.Config.payoutRole) return interaction.editReply({ content: "Nie znaleziono roli do wypłat." }).catch();
@@ -82,7 +83,7 @@ export class Bonus {
         if (!checkUserRoles(fetchedUser, [this.Config.payoutRole])) return await interaction.editReply({ content: "Nie masz uprawnień do wypłaty premii." });
 
         const ThanksEmbed = this.buildThanksEmbed(fetchedUser, interaction.guild!, messageEmbed.fields[3].value);
-        const embedAuthor = interaction.guild?.members.cache.find(m => m.nickname === messageEmbed.author?.name || m.user.username === messageEmbed.author?.name)
+        const embedAuthor = interaction.guild.members.cache.find(m => m.nickname === messageEmbed.author?.name || m.user.username === messageEmbed.author?.name)
 
         messageEmbed.fields[6].value = `${PositiveEmoji}`;
         messageEmbed.fields[7].value = `${fetchedUser.nickname || fetchedUser.user.username}`;

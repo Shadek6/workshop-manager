@@ -18,4 +18,5 @@ export interface IConfig {
     tuningTicketMessage?: string;
     workTicketMessage?: string;
     partnershipTicketMessage?: string;
+    workerStartRole?: string;
 }

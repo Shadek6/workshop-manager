@@ -17,13 +17,15 @@ export class Worker {
         this.Config = fetchedConfig;
     }
     public async Add(interaction: ChatInputCommandInteraction) {
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ ephemeral: true, fetchReply: true });
         if (!this.Config.welcomeChannel) return interaction.editReply({ content: "Nie znaleziono kanału powitalnego." });
+        if (!this.Config.teamRole) return interaction.editReply({ content: "Nie znaleziono roli zespołu." });
+        if (!this.Config.workerStartRole) return interaction.editReply({ content: "Nie znaleziono roli początkowej pracownika." });
 
         const Worker = interaction.options.getUser("worker", true);
         const Nickname = interaction.options.getString("nickname", true);
-        const fetchedUser = interaction.guild?.members.cache.get(interaction.user.id)!;
-        const fetchedWorker = interaction.guild?.members.cache.get(Worker.id)!;
+        const fetchedUser = interaction.guild!.members.cache.get(interaction.user.id)!;
+        const fetchedWorker = interaction.guild!.members.cache.get(Worker.id)!;
         const welcomeChannel = interaction.guild!.channels.cache.get(this.Config.welcomeChannel) as GuildTextBasedChannel | undefined;
 
         if (!fetchedUser) return interaction.editReply({ content: "Nie znaleziono użytkownika." });
@@ -32,10 +34,11 @@ export class Worker {
 
         const Embed = this.buildWelcome(fetchedWorker);
 
-        await fetchedWorker.setNickname(`${Nickname} | ${fetchedWorker.user.username}`);
-        await fetchedWorker.roles.add(this.Config.workerRole);
-        await welcomeChannel.send({ content: `<@${fetchedWorker.id}>`, embeds: [Embed] });
-        return interaction.editReply({ content: `Dodano pracownika ${fetchedWorker.nickname || fetchedWorker.user.username}` });
+        fetchedWorker.setNickname(`${Nickname} | ${fetchedWorker.user.username}`).catch();
+        fetchedWorker.roles.add(this.Config.workerRole).catch();
+        fetchedWorker.roles.add(this.Config.workerStartRole || "").catch();
+        welcomeChannel.send({ content: `<@${fetchedWorker.id}>`, embeds: [Embed] }).catch();
+        return interaction.editReply({ content: `Dodano pracownika ${fetchedWorker.nickname || fetchedWorker.user.username}` }).catch();
     }
 
     public async Register(interaction: ChatInputCommandInteraction) {
@@ -44,8 +47,8 @@ export class Worker {
         const account_number = interaction.options.getString("account_number", true);
         const phone_number = interaction.options.getString("phone_number", true);
         const user_id = interaction.user.id;
-        const fetchedUser = interaction.guild?.members.cache.get(interaction.user.id)!;
-        const contactChannel = interaction.guild?.channels.cache.get(this.Config.contactChannel) as GuildTextBasedChannel | undefined;
+        const fetchedUser = interaction.guild!.members.cache.get(interaction.user.id)!;
+        const contactChannel = interaction.guild!.channels.cache.get(this.Config.contactChannel) as GuildTextBasedChannel | undefined;
 
         if (!fetchedUser) return interaction.editReply({ content: "Nie znaleziono użytkownika." });
         if (!contactChannel) return interaction.editReply({ content: "Nie znaleziono kanału kontaktowego." });
@@ -69,7 +72,7 @@ export class Worker {
         const fetchedDbUser = await this.Mongo.getWorker(interaction.options.getString("worker", true));
         if (!fetchedDbUser) return interaction.editReply({ content: "Nie znaleziono pracownika." });
 
-        const contactChannel = interaction.guild?.channels.cache.get(this.Config.contactChannel) as TextBasedChannel | undefined;
+        const contactChannel = interaction.guild!.channels.cache.get(this.Config.contactChannel) as TextBasedChannel | undefined;
         if (!contactChannel) return interaction.editReply({ content: "Nie znaleziono kanału kontaktowego." });
 
         this.Mongo.deleteWorker(fetchedDbUser.user_id);
