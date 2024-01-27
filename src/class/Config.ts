@@ -111,7 +111,7 @@ export class Config {
                 return interaction.editReply({ content: "An error occured while updating the config file." });
             }
 
-            return await interaction.editReply({ content: "Successfully updated the config file." });
+            return interaction.editReply({ content: "Successfully updated the config file." });
         });
     }
 }
