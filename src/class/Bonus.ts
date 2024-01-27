@@ -88,7 +88,10 @@ export class Bonus {
         messageEmbed.fields[6].value = `${PositiveEmoji}`;
         messageEmbed.fields[7].value = `${fetchedUser.nickname || fetchedUser.user.username}`;
 
-        if(embedAuthor) embedAuthor.send({ embeds: [ThanksEmbed] }).catch();
+        if(embedAuthor) embedAuthor.send({ embeds: [ThanksEmbed] }).catch(e => {
+            if(e.code === 50007) console.log(`Couldn't send message to user ${embedAuthor.user.username}, because of privacy settings.`)
+            else console.error(e.code);
+        });
 
         await interaction.message.edit({ embeds: [messageEmbed], components: [] });
         return interaction.editReply({ content: "Wypłacono premię." }).catch();

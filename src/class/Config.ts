@@ -32,7 +32,7 @@ export class Config {
                 console.error(err);
                 return interaction.editReply({ content: "An error occured while creating the config file." });
             }
-            return await interaction.editReply({ content: "Successfully created the config file." });
+            return interaction.editReply({ content: "Successfully created the config file." });
         });
     }
 
@@ -50,7 +50,7 @@ export class Config {
                 return interaction.editReply({ content: "An error occured while updating the config file." });
             }
 
-            return await interaction.editReply({ content: "Successfully updated the config file." });
+            return interaction.editReply({ content: "Successfully updated the config file." });
         });
     }
 

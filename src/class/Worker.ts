@@ -77,7 +77,7 @@ export class Worker {
 
         this.Mongo.deleteWorker(fetchedDbUser.user_id);
 
-        await interaction.editReply({ content: "Wyrejestrowano pracownika." });
+        interaction.editReply({ content: "Wyrejestrowano pracownika." }).catch();
         return;
     }
 
