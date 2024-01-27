@@ -10,7 +10,7 @@ export async function ButtonInteractions(interaction: ButtonInteraction) {
 
     if (!config) return;
 
-    if(interaction.customId === "bonus-payout") await bonus.Payout(interaction);
+    if(interaction.customId === "bonus-payout") bonus.Payout(interaction);
 
     if (interaction.customId === "ticket-tuning") ticket.Create(interaction, "tuning", [config.workerRole])
     if (interaction.customId === "ticket-work") ticket.Create(interaction, "work", [config.teamRole])

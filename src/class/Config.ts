@@ -65,7 +65,7 @@ export class Config {
                 return interaction.editReply({ content: "An error occured while updating the config file." });
             }
 
-            return await interaction.editReply({ content: "Successfully updated the config file." });
+            return interaction.editReply({ content: "Successfully updated the config file." });
         });
     }
 
@@ -74,7 +74,7 @@ export class Config {
         const ConfigFilePath = `./src/config/guilds/${interaction.guildId}.json`;
         const params = JSON.parse(fs.readFileSync(ConfigFilePath, "utf-8"));
 
-        return await interaction.editReply({ content: `\`\`\`json\n${JSON.stringify(params, null, 2)}\`\`\`` });
+        return interaction.editReply({ content: `\`\`\`json\n${JSON.stringify(params, null, 2)}\`\`\`` });
     }
 
     public Exists(guildId: string) {
@@ -96,7 +96,7 @@ export class Config {
                 return interaction.editReply({ content: "An error occured while updating the config file." });
             }
 
-            return await interaction.editReply({ content: "Successfully updated the config file." });
+            return interaction.editReply({ content: "Successfully updated the config file." });
         });
     }
 

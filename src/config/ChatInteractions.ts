@@ -14,22 +14,22 @@ export async function ChatInteractions(interaction: ChatInputCommandInteraction)
 
     if (interaction.commandName === "config") {
         if (interaction.options.getSubcommand() === "create") {
-            await config.Create(interaction);
+            config.Create(interaction);
         }
         if (interaction.options.getSubcommand() === "update") {
-            await config.Update(interaction);
+            config.Update(interaction);
         }
         if (interaction.options.getSubcommand() === "add-worker-percentage") {
-            await config.AddWorkerPercentage(interaction);
+            config.AddWorkerPercentage(interaction);
         }
         if (interaction.options.getSubcommand() === "clear-worker-percentage") {
-            await config.ClearWorkerPercentage(interaction);
+            config.ClearWorkerPercentage(interaction);
         }
         if (interaction.options.getSubcommand() === "refresh") {
-            await config.Refresh(interaction);
+            config.Refresh(interaction);
         }
         if (interaction.options.getSubcommand() === "show") {
-            await config.Show(interaction);
+            config.Show(interaction);
         }
     }
 

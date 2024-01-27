@@ -27,7 +27,7 @@ export class Ticket {
             }
         }
 
-        const ticketChannel = await interaction.guild?.channels.create({
+        const ticketChannel = await interaction.guild!.channels.create({
             name: `${ticketPanel}-${interaction.user.username}`,
             type: ChannelType.GuildText,
             parent: this.Config.ticketCategory || null,
@@ -61,13 +61,13 @@ export class Ticket {
         if(ticketPanel === "work") ticketEmbed = await this.buildWelcomeEmbed("Ticket - Praca", this.Config.workTicketMessage || undefined);
         if(ticketPanel === "partnership") ticketEmbed = await this.buildWelcomeEmbed("Ticket - Współpraca", this.Config.partnershipTicketMessage || undefined);
 
-        await ticketChannel.send({ content: `Ticket utworzony przez <@${interaction.user.id}>\n${pingMessage}`, components: [ActionRow], embeds: [ticketEmbed]});
+        ticketChannel.send({ content: `Ticket utworzony przez <@${interaction.user.id}>\n${pingMessage}`, components: [ActionRow], embeds: [ticketEmbed]});
         return interaction.editReply({ content: `Ticket utworzony: ${ticketChannel}` });
     }
 
     public async SendPanel(interaction: ChatInputCommandInteraction) {
         await interaction.deferReply({ ephemeral: true })
-        const panelEmbed = await this.buildPanel();
+        const panelEmbed = this.buildPanel();
         const TuningButton = buildButton("PRIMARY", "ticket-tuning", "Tuning", "🔧");
         const WorkButton = buildButton("PRIMARY", "ticket-work", "Praca", "👷");
         const PartnershipButton = buildButton("PRIMARY", "ticket-partnership", "Współpraca", "🤝");
@@ -84,9 +84,9 @@ export class Ticket {
 
         await interaction.editReply({ content: "Ticket zostanie zamknięty za 5 sekund..." });
         setTimeout(async () => {
-            await (interaction.channel as TextChannel).setParent(this.Config.archiveCategory);
-            await (interaction.channel as TextChannel).permissionOverwrites.set([{ id: interaction.guild!.roles.everyone, deny: ["ViewChannel"] }]);
-            await interaction.channel!.send({ content: "# Ticket został zamknięty." });
+            (interaction.channel as TextChannel).setParent(this.Config.archiveCategory);
+            (interaction.channel as TextChannel).permissionOverwrites.set([{ id: interaction.guild!.roles.everyone, deny: ["ViewChannel"] }]);
+            interaction.channel!.send({ content: "# Ticket został zamknięty." });
         }, 5000)
     }
 
