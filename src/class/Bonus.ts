@@ -22,9 +22,9 @@ export class Bonus {
         await interaction.deferReply({ ephemeral: true })
         const Amount = interaction.options.getNumber("kwota", true);
         const toReturn = interaction.options.getBoolean("zwrot", true);
-        const fetchedUser = interaction.guild?.members.cache.get(interaction.user.id)!;
+        const fetchedUser = interaction.guild!.members.cache.get(interaction.user.id)!;
         const characterData = await this.Mongo.getWorker(interaction.user.id);
-        const userRoles = interaction.guild?.members.cache.get(interaction.user.id)?.roles.cache;
+        const userRoles = interaction.guild!.members.cache.get(interaction.user.id)!.roles.cache;
         const bonusChannel = interaction.guild!.channels.cache.get(this.Config.bonusChannel) as GuildTextBasedChannel | undefined;
         let toPayout: number | undefined;
 
