@@ -45,7 +45,7 @@ export class Verify {
             .setTitle("Weryfikacja")
             .setDescription("Kliknij przycisk poniżej, aby się zweryfikować.")
             .setColor("Random")
-            .setThumbnail(this.Config.guildLogo || "")
+            .setThumbnail(this.Config.guildLogo || null)
         
         return embed;
     }
