@@ -19,4 +19,5 @@ export interface IConfig {
     workTicketMessage?: string;
     partnershipTicketMessage?: string;
     workerStartRole?: string;
+    verifiedRole?: string;
 }

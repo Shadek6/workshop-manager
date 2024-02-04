@@ -22,7 +22,8 @@ export class Config {
             welcomeMessage: "",
             welcomeChannel: "",
             contactChannel: "",
-            payoutRole: ""
+            payoutRole: "",
+            verifiedRole: ""
         };
 
         if (fs.existsSync(ConfigFilePath)) return;
@@ -146,7 +147,8 @@ export const data = new SlashCommandBuilder()
                         { name: "payoutRole", value: "payoutRole"},
                         { name: "tuningTicketMessage", value: "tuningTicketMessage"},
                         { name: "workTicketMessage", value: "workTicketMessage"},
-                        { name: "partnershipTicketMessage", value: "partnershipTicketMessage"}
+                        { name: "partnershipTicketMessage", value: "partnershipTicketMessage"},
+                        { name: "verifiedRole", value: "verifiedRole"}
                     )
                     .setRequired(true)
             )

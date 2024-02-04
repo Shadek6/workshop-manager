@@ -3,7 +3,7 @@ import { Client, GatewayIntentBits, Guild } from "discord.js";
 import { ChatInteractions } from "./config/ChatInteractions";
 import { ButtonInteractions } from "./config/ButtonInteractions";
 
-const client = new Client({ intents: [GatewayIntentBits.GuildMembers, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
+export const client = new Client({ intents: [GatewayIntentBits.GuildMembers, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
 
 client.on("ready", () => {
     console.log("Ready!");
@@ -16,5 +16,3 @@ client.on("interactionCreate", async (interaction) => {
 });
 
 client.login(process.env.TOKEN);
-
-export { client };

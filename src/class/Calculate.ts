@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { checkUserRoles } from "../util/checkPermissions";
 
 export class Calculate {
@@ -22,4 +22,5 @@ export class Calculate {
 export const data = new SlashCommandBuilder()
     .setName("calculate")
     .setDescription("Kalkulator.")
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .addStringOption((option) => option.setName("expression").setDescription("Wyrażenie do przeliczenia.").setRequired(true))

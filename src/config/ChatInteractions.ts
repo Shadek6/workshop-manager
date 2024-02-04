@@ -4,6 +4,7 @@ import { Bonus } from "../class/Bonus";
 import { Worker } from "../class/Worker";
 import { Ticket } from "../class/Ticket";
 import { Calculate } from "../class/Calculate";
+import { Verify } from "../class/Verify";
 
 export async function ChatInteractions(interaction: ChatInputCommandInteraction) {
     const config = new Config();
@@ -12,6 +13,7 @@ export async function ChatInteractions(interaction: ChatInputCommandInteraction)
     const bonus = new Bonus(interaction.guildId!);
     const worker = new Worker(interaction.guildId!);
     const ticket = new Ticket(interaction.guildId!)
+    const verify = new Verify(interaction.guildId!)
     const calculate = new Calculate(interaction)
 
     if (interaction.commandName === "config") {
@@ -61,5 +63,11 @@ export async function ChatInteractions(interaction: ChatInputCommandInteraction)
 
     if (interaction.commandName === "calculate") {
         calculate.Calculate();
+    }
+
+    if (interaction.commandName === "verify") {
+        if(interaction.options.getSubcommand() === "panel") {
+            verify.SendPanel(interaction);
+        }
     }
 }
